@@ -19,22 +19,29 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "Globoplay"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.isTranslucent = false
-        //navigationItem.largeTitleDisplayMode = .never
-        
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
-        navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
-        navigationController?.navigationBar.backgroundColor = .black
-        //view.backgroundColor = UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1)
+       
+        setupNavBar()
     
         request.getMoviesGenresRequest { Genres in
             self.genres = Genres.genres
-            //self.table.reloadData()
             self.setupTable()
             
         }
+    
+    }
+    
+    
+    private func setupNavBar () {
+        
+        navigationItem.title = "Globoplay"
+        
+        let titleBarAttibutes = [NSAttributedString.Key.foregroundColor: UIColor.white,
+                                 NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24)]
+        
+        navigationController?.navigationBar.titleTextAttributes = titleBarAttibutes
+        navigationController?.navigationBar.barTintColor = .black
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.barStyle = .black
     
     }
     
@@ -50,16 +57,15 @@ class ViewController: UIViewController {
         
         table.translatesAutoresizingMaskIntoConstraints = false
         table.separatorStyle = .none
-        //table.backgroundColor = UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.0)
+        table.backgroundColor = .homeBackground
+        table.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.table.bounds.size.width, height: 40))
+        table.contentInset = UIEdgeInsets(top: -40, left: 0, bottom: 0, right: 0)
         
         table.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         table.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         table.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         table.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        
     }
-        
-
 }
 
 
@@ -90,15 +96,28 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
         
-        let sectionName = self.genres[section].name
+        let label = UILabel()
+        label.frame = CGRect(x: 15, y: 5, width: self.table.bounds.size.width, height: 20)
+        label.text = self.genres[section].name
+        label.textColor = .white
+        label.font = .boldSystemFont(ofSize: 20)
         
-        return sectionName
+        view.addSubview(label)
+        
+        return view
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 350
+        return 200
     }
     
     

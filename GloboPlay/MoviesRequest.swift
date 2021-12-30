@@ -67,8 +67,7 @@ struct MoviesRequest {
     func getMovieDetails(movieId: Int, completion: @escaping (MovieDetail) -> Void) {
         let id = String(movieId)
         
-//        guard let url = URL(string: "https://api.themoviedb.org/3/movie/550?api_key=8783aafa1330bbeebe9f3d063d8647cc&language=pt-BR") else {return}
-        
+
         guard let url = URL(string: CONST.BASE_URL + CONST.MOVIE + id + CONST.API_KEY + CONST.LANGUAGE_BR) else { return }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -89,6 +88,76 @@ struct MoviesRequest {
             
         }.resume()
     }
+    
+    
+    // MARK: RECUPERAR RECOMENDACOES PARA UM FILME
+    func getRecommendations(movieID: Int, completion: @escaping(Root) -> Void) {
+        let movieID = String(movieID)
+        
+        guard let url = URL(string: CONST.BASE_URL + CONST.MOVIE + movieID + CONST.RECOMMENDATIONS + CONST.API_KEY + CONST.LANGUAGE_BR) else { return }
+    
+       
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            
+            if error == nil {
+                guard let data = data else { return }
+                
+                do {
+                    let recommendations = try JSONDecoder().decode(Root.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(recommendations)
+                    }
+                    
+                } catch {
+                    print(error.localizedDescription)
+                }
+            } else {
+                print(error!.localizedDescription)
+            }
+            
+        }.resume()
+        
+    }
+    
+    
+    // MARK: ADICIONAR FILMES A LISTA
+    func addMovieToList(movieId: Int, completion: @escaping(Int) -> Void) {
+        guard let url = URL(string: "https://api.themoviedb.org/4/list/8173428/items") else { return }
+        var request = URLRequest(url: url)
+        
+        let listData = listData(media_type: "movie", media_id: movieId)
+        let jsonObject = Items(items: [listData])
+        
+        do {
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue(CONST.ACCESS_TOKEN, forHTTPHeaderField: "Authorization")
+            
+            request.httpBody = try JSONEncoder().encode(jsonObject)
+            
+            URLSession.shared.dataTask(with: request) { data, response, error in
+              
+                let res = response as? HTTPURLResponse
+                    
+                DispatchQueue.main.async {
+                    
+                    if(error == nil) {
+                        completion(res!.statusCode)
+                    } else {
+                        completion(440)
+                    }
+                    
+                }
+                    
+               
+            }.resume()
+            
+        } catch {
+            print(error.localizedDescription)
+        }
+          
+    }
 }
+
 
 

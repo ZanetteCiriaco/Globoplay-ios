@@ -28,11 +28,11 @@ class MovieCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        //hide or reset anything you want hereafter, for example
         moviePosterImage.isHidden = true
     }
     
     private func setupMoviePosterImage() {
+        
         moviePosterImage = UIImageView()
         contentView.addSubview(moviePosterImage)
         

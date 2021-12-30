@@ -7,8 +7,17 @@
 
 import Foundation
 
+struct Items: Encodable {
+    let items: [listData]
+}
 
-// MARK: - Welcome
+struct listData: Encodable {
+    let media_type: String
+    let media_id: Int
+}
+
+
+// MARK: - genre root
 struct Genres: Decodable {
     let genres: [Genre]
 }
@@ -36,11 +45,15 @@ struct Root: Decodable {
     let results: [Movie]
 }
 
+// MARK: - recommendations
+//struct Recommendations: Decodable {
+//    //let page: Int
+//    let results: [Movie]
+//    //let totalPages, totalResults: Int
+//}
 
 
-
-
-// MARK: - Welcome
+// MARK: - movie detail
 struct MovieDetail: Decodable {
     //let adult: Bool
     //let backdropPath: String
@@ -53,32 +66,36 @@ struct MovieDetail: Decodable {
     //let originalLanguage,
     let original_title: String
     let overview: String
-    //let popularitty: Double
+    let popularity: Double
     let poster_path: String
     //let productionCompanies: [ProductionCompany]
-    //let productionCountries: [ProductionCountry]
-    //let releaseDate: String
-    //let revenue, runtime: Int
+    let production_countries: [ProductionCountry]
+    let release_date: String
+    //let revenue,
+    let runtime: Int
     //let spokenLanguages: [SpokenLanguage]
     let status, tagline, title: String
     //let video: Bool
     //let voteAverage, voteCount: Int
 }
-//
-//// MARK: - ProductionCompany
-//struct ProductionCompany {
+
+struct ProductionCountry: Decodable {
+    let name: String
+}
+
+
+
+
+//// MARK: - Result
+//struct Result {
+//    let adult: Bool
+//    let backdropPath: NSNull
+//    let genreIDS: [Int]
 //    let id: Int
-//    let logoPath: NSNull
-//    let name, originCountry: String
-//}
-//
-//// MARK: - ProductionCountry
-//struct ProductionCountry: Decodable {
-//    //let iso3166_1
-//    let name: String
-//}
-//
-//// MARK: - SpokenLanguage
-//struct SpokenLanguage {
-//    let englishName, iso639_1, name: String
+//    let originalLanguage, originalTitle, overview, releaseDate: String
+//    let posterPath: NSNull
+//    let popularity: Double
+//    let title: String
+//    let video: Bool
+//    let voteAverage, voteCount: Int
 //}

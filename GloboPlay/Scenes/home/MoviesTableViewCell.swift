@@ -30,6 +30,7 @@ class MoviesTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        backgroundColor = .homeBackground
         setupMovieCollection()
     }
 
@@ -46,11 +47,11 @@ class MoviesTableViewCell: UITableViewCell {
     private func setupMovieCollection(){
         
         let Layout = UICollectionViewFlowLayout()
-        Layout.itemSize = CGSize(width: 250, height: 330)
+        Layout.itemSize = CGSize(width: 140, height: 200)
         Layout.scrollDirection = .horizontal
         
         moviesColletion = UICollectionView(frame: self.contentView.frame, collectionViewLayout: Layout)
-        moviesColletion.backgroundColor = .white
+        moviesColletion.backgroundColor = .homeBackground
         moviesColletion.translatesAutoresizingMaskIntoConstraints = false
         
         moviesColletion.delegate = self
@@ -61,7 +62,7 @@ class MoviesTableViewCell: UITableViewCell {
         
         moviesColletion.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         moviesColletion.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-        moviesColletion.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        moviesColletion.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
         moviesColletion.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     }
 
